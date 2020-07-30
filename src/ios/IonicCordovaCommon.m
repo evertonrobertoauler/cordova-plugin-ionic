@@ -74,15 +74,18 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[urlSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error) {
+        NSHTTPURLResponse *res = (NSHTTPURLResponse *) response;
+
+        if (error || (long)[res statusCode] >= 400 || (long)[res statusCode] < 200) {
             NSLog(@"Download Error:%@",error.description);
             [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: [error localizedDescription]]  callbackId:command.callbackId];
-        }
-        if (data) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:[target stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
-            [data writeToFile:target atomically:YES];
-            NSLog(@"File is saved to %@", target);
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+        } else {
+            if (data) {
+                [[NSFileManager defaultManager] createDirectoryAtPath:[target stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+                [data writeToFile:target atomically:YES];
+                NSLog(@"File is saved to %@", target);
+                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            }
         }
     }] resume];
 }
