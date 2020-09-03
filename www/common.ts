@@ -17,6 +17,9 @@ const channel = cordova.require('cordova/channel');
 channel.createSticky('onIonicProReady');
 channel.waitForInitialization('onIonicProReady');
 
+const LOG = (...params: any[]) => console.log(...params, (new Date()).toJSON());
+
+
 declare const Ionic: any;
 declare const WEBVIEW_SERVER_URL: string;
 declare const Capacitor: any;
@@ -222,10 +225,15 @@ class IonicDeployImpl {
   async downloadUpdate(progress?: CallbackFunction<number>): Promise<boolean> {
     const prefs = this._savedPreferences;
     if (prefs.availableUpdate && prefs.availableUpdate.state === UpdateState.Available) {
+      LOG('before _fetchManifest', prefs.availableUpdate.url);
       const { fileBaseUrl, manifestJson } = await this._fetchManifest(prefs.availableUpdate.url);
+      LOG('after _fetchManifest');
       const diffedManifest = await this._diffManifests(manifestJson);
+      LOG('after diffedManifest');
       await this.prepareUpdateDirectory(prefs.availableUpdate.versionId);
+      LOG('after prepareUpdateDirectory');
       await this._downloadFilesFromManifest(fileBaseUrl, diffedManifest,  prefs.availableUpdate.versionId, progress);
+      LOG('after _downloadFilesFromManifest');
       prefs.availableUpdate.state = UpdateState.Pending;
       await this._savePrefs(prefs);
       return true;
@@ -284,6 +292,9 @@ class IonicDeployImpl {
       method: 'GET',
       redirect: 'follow',
     });
+
+    LOG('midle _fetchManifest');
+
     return {
       fileBaseUrl: resp.url,
       manifestJson: await resp.json()

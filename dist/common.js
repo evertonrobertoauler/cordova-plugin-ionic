@@ -36,9 +36,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var channel = cordova.require('cordova/channel');
 channel.createSticky('onIonicProReady');
 channel.waitForInitialization('onIonicProReady');
+var LOG = function () {
+    var params = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        params[_i] = arguments[_i];
+    }
+    return console.log.apply(console, __spreadArrays(params, [(new Date()).toJSON()]));
+};
 var UpdateMethod;
 (function (UpdateMethod) {
     UpdateMethod["BACKGROUND"] = "background";
@@ -298,18 +312,23 @@ var IonicDeployImpl = /** @class */ (function () {
                     case 0:
                         prefs = this._savedPreferences;
                         if (!(prefs.availableUpdate && prefs.availableUpdate.state === UpdateState.Available)) return [3 /*break*/, 6];
+                        LOG('before _fetchManifest', prefs.availableUpdate.url);
                         return [4 /*yield*/, this._fetchManifest(prefs.availableUpdate.url)];
                     case 1:
                         _a = _b.sent(), fileBaseUrl = _a.fileBaseUrl, manifestJson = _a.manifestJson;
+                        LOG('after _fetchManifest');
                         return [4 /*yield*/, this._diffManifests(manifestJson)];
                     case 2:
                         diffedManifest = _b.sent();
+                        LOG('after diffedManifest');
                         return [4 /*yield*/, this.prepareUpdateDirectory(prefs.availableUpdate.versionId)];
                     case 3:
                         _b.sent();
+                        LOG('after prepareUpdateDirectory');
                         return [4 /*yield*/, this._downloadFilesFromManifest(fileBaseUrl, diffedManifest, prefs.availableUpdate.versionId, progress)];
                     case 4:
                         _b.sent();
+                        LOG('after _downloadFilesFromManifest');
                         prefs.availableUpdate.state = UpdateState.Pending;
                         return [4 /*yield*/, this._savePrefs(prefs)];
                     case 5:
@@ -407,6 +426,7 @@ var IonicDeployImpl = /** @class */ (function () {
                         })];
                     case 1:
                         resp = _b.sent();
+                        LOG('midle _fetchManifest');
                         _a = {
                             fileBaseUrl: resp.url
                         };

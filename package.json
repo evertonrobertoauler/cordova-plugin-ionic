@@ -56,9 +56,9 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@angular/compiler": "^9.1.1",
-    "@angular/compiler-cli": "^9.1.1",
-    "@angular/core": "^7.2.15",
+    "@angular/compiler": "~10.0.14",
+    "@angular/compiler-cli": "~10.0.14",
+    "@angular/core": "~10.0.14",
     "@types/cordova": "0.0.34",
     "jest": "^22.4.3",
     "np": "^3.0.4",
@@ -87,6 +87,6 @@
     "testRegex": "tests/.*\\.(ts|js)$"
   },
   "dependencies": {
-    "typescript": "^3.5.3"
+    "typescript": "~3.9.7"
   }
 }
