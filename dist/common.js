@@ -128,7 +128,7 @@ var IonicDeployImpl = /** @class */ (function () {
                         // NOTE: call sync with background as override to avoid sync
                         // reloading the app and manually reload always once sync has
                         // set the correct currentVersionId
-                        console.log('calling _sync');
+                        LOG('calling _sync');
                         _b.label = 3;
                     case 3:
                         _b.trys.push([3, 5, , 6]);
@@ -142,11 +142,11 @@ var IonicDeployImpl = /** @class */ (function () {
                         console.warn('Sync failed. Defaulting to last available version.');
                         return [3 /*break*/, 6];
                     case 6:
-                        console.log('calling _reload');
+                        LOG('calling _reload');
                         return [4 /*yield*/, this.reloadApp()];
                     case 7:
                         _b.sent();
-                        console.log('done _reloading');
+                        LOG('done _reloading');
                         return [3 /*break*/, 11];
                     case 8:
                         this.reloadApp();
@@ -346,7 +346,7 @@ var IonicDeployImpl = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log('Downloading update...');
+                        LOG('Downloading update...');
                         size = 0, downloaded = 0;
                         manifest.forEach(function (i) {
                             size += i.size;
@@ -467,11 +467,11 @@ var IonicDeployImpl = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this._cleanSnapshotDir(versionId)];
                     case 1:
                         _a.sent();
-                        console.log('Cleaned version directory');
+                        LOG('Cleaned version directory');
                         return [4 /*yield*/, this._copyBaseAppDir(versionId)];
                     case 2:
                         _a.sent();
-                        console.log('Copied base app resources');
+                        LOG('Copied base app resources');
                         return [2 /*return*/];
                 }
             });
@@ -635,7 +635,7 @@ var IonicDeployImpl = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         e_3 = _a.sent();
-                        console.log('No directory found for snapshot no need to delete');
+                        LOG('No directory found for snapshot no need to delete');
                         timer.end();
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];

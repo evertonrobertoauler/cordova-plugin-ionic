@@ -19,7 +19,6 @@ channel.waitForInitialization('onIonicProReady');
 
 const LOG = (...params: any[]) => console.log(...params, (new Date()).toJSON());
 
-
 declare const Ionic: any;
 declare const WEBVIEW_SERVER_URL: string;
 declare const Capacitor: any;
@@ -96,16 +95,16 @@ class IonicDeployImpl {
         // NOTE: call sync with background as override to avoid sync
         // reloading the app and manually reload always once sync has
         // set the correct currentVersionId
-        console.log('calling _sync');
+        LOG('calling _sync');
         try {
           await this.sync({updateMethod: UpdateMethod.BACKGROUND});
         } catch (e) {
           console.warn(e);
           console.warn('Sync failed. Defaulting to last available version.');
         }
-        console.log('calling _reload');
+        LOG('calling _reload');
         await this.reloadApp();
-        console.log('done _reloading');
+        LOG('done _reloading');
         break;
       case UpdateMethod.NONE:
         this.reloadApp();
@@ -242,7 +241,7 @@ class IonicDeployImpl {
   }
 
   private async _downloadFilesFromManifest(baseUrl: string, manifest: ManifestFileEntry[], versionId: string, progress?: CallbackFunction<number>) {
-    console.log('Downloading update...');
+    LOG('Downloading update...');
     let size = 0, downloaded = 0;
     manifest.forEach(i => {
       size += i.size;
@@ -314,10 +313,10 @@ class IonicDeployImpl {
 
   private async prepareUpdateDirectory(versionId: string) {
     await this._cleanSnapshotDir(versionId);
-    console.log('Cleaned version directory');
+    LOG('Cleaned version directory');
 
     await this._copyBaseAppDir(versionId);
-    console.log('Copied base app resources');
+    LOG('Copied base app resources');
   }
 
   async extractUpdate(progress?: CallbackFunction<number>): Promise<boolean> {
@@ -425,7 +424,7 @@ class IonicDeployImpl {
       await this._fileManager.remove(snapshotDir);
       timer.end();
     } catch (e) {
-      console.log('No directory found for snapshot no need to delete');
+      LOG('No directory found for snapshot no need to delete');
       timer.end();
     }
   }
